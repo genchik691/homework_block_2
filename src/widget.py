@@ -1,42 +1,49 @@
-from src.masks import get_mask_card_number, get_mask_account
+import re
 from datetime import datetime
+from src.masks import get_mask_card_number, get_mask_account
 
-def mask_account_card(card_info: str) -> str:
+
+
+def mask_account_card(text: str) -> str:
     """
-    Маскирует номер карты или счёта в строке с информацией о платеже.
+    Маскирует номер карты или счёта в тексте.
 
     Args:
-        card_info (str): Строка с типом карты/счёта и номером, например:
-            "Visa Platinum 7000792289606361" или "Счет 73654108430135874305".
+        text (str): Строка с типом карты/счёта и номером, например:
+            'Visa Platinum 7000792289606361' или 'Счёт 73654108430135874305'
 
     Returns:
         str: Строка с замаскированным номером.
     """
-    parts = card_info.split()
-    number_str = parts[-1]
+    # Ищем 16‑значный номер карты
+    card_match = re.search(r'\b\d{16}\b', text)
+    if card_match:
+        card_number = card_match.group()
+        masked_number = get_mask_card_number(card_number)
+        return re.sub(r'\d{16}', masked_number, text)
 
-    try:
-        number = int(number_str)
-    except ValueError:
-        raise ValueError("Номер карты/счёта должен содержать только цифры")
+    # Ищем длинный номер счёта (20 цифр)
+    account_match = re.search(r'\b\d{20}\b', text)
+    if account_match:
+        account_number = account_match.group()
+        masked_number = get_mask_account(account_number)
+        return re.sub(r'\d{20}', masked_number, text)
 
-    if "Счет" in card_info:
-        masked_number = get_mask_account(number)
-    else:
-        masked_number = get_mask_card_number(number)
+    return text
 
-    return f"{' '.join(parts[:-1])} {masked_number}"
 
 
 def get_date(date_string: str) -> str:
     """
-    Преобразует строку с датой в формат ДД.ММ.ГГГГ.
+    Преобразует строку с датой из формата ISO в формат ДД.ММ.ГГГГ.
 
     Args:
-        date_string (str): Дата в формате "2024-03-11T02:26:18.671407".
+        date_string (str): Дата в формате '2024-03-11T02:26:18.671407'
 
     Returns:
-        str: Дата в формате "ДД.ММ.ГГГГ".
+        str: Дата в формате '11.03.2024'
     """
-    dt = datetime.fromisoformat(date_string.replace("Z", "+00:00"))
-    return dt.strftime("%d.%m.%Y")
+    # Парсим дату из строки ISO
+    dt = datetime.fromisoformat(date_string.replace('Z', '+00:00'))
+    # Форматируем в нужный формат
+    return dt.strftime('%d.%m.%Y')
