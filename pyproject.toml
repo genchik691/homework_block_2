@@ -1,0 +1,65 @@
+[project]
+name = "homework-block-2"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Gennadiy Kokaulin", email = "Genchik691@gmail.com"}
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pytest>=9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "flake8>=6.0",
+    "black>=23.0"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [
+    { include = "src" }
+]
+
+[dependency-groups]
+lint = [
+    "flake8 (>=7.3.0,<8.0.0)",
+    "black (>=26.3.1,<27.0.0)",
+    "isort (>=8.0.1,<9.0.0)",
+    "mypy (>=1.20.0,<2.0.0)"
+]
+
+[tool.black]
+line-length = 119
+target-version = ['py311']
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 119
+multi_line_output = 3
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+disallow_untyped_defs = true
+warn_return_any = true
+exclude = [
+    "venv",
+    ".git"
+]
