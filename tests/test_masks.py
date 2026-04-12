@@ -12,11 +12,11 @@
 def test_get_mask_account() -> None:
     from src.masks import get_mask_account
 
-    result = get_mask_account("1234567890")
+    result = get_mask_account("12345678901234567890")
     assert result == "**7890"
 
     # Дополнительные тесты
-    assert get_mask_account("0000000001") == "**0001"
+    assert get_mask_account("00000000000000000001") == "**0001"
     assert get_mask_account("9999") == "9999"  # короткий номер
     assert get_mask_account("1") == "1"  # очень короткий номер
 
