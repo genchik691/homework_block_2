@@ -54,7 +54,8 @@ print(filtered)
 ```markdown
 ## Структура проекта
 
-homework_block_2/
+homework_block_2/ 
+├── htmlcov/               # Отчёт coverage
 ├── src/
 │   ├── masks.py           # Вспомогательные функции для маскировки
 │   ├── processing.py      # Функции обработки данных
@@ -63,13 +64,14 @@ homework_block_2/
 │   ├── test_masks.py     # Тесты для масок
 │   ├── test_processing.py  # Тесты для функций обработки
 │   └── test_widget.py    # Тесты для виджета
+├── .coverage            # Отчёт о покрытии тестами
 ├── .flake8              # Конфигурация линтера
 ├── .gitignore           # Игнорируемые файлы
 ├── main.py             # Главный файл запуска
 ├── poetry.lock         # Зависимости Poetry
 ├── pyproject.toml      # Конфигурация Poetry
 ├── README.md           # Этот файл
-└── requirements.txt      # Зависимости проекта
+
 ```
 
 6. Тестирование
