@@ -1,35 +1,33 @@
+import re
 from datetime import datetime
-
-from .masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(card_info: str) -> str:
-    """
-    Маскирует номер карты или счёта в строке с информацией о платеже.
+    """Маскирует номер карты или счёта в зависимости от длины и формата."""
+    card_info = card_info.strip()
 
-    Args:
-        card_info (str): Строка с типом карты/счёта и номером, например:
-            "Visa Platinum 7000792289606361" или "Счет 73654108430135874305".
-
-    Returns:
-        str: Строка с замаскированным номером.
-    """
-    parts = card_info.split()
-    if not parts:
+    if not card_info:
         raise ValueError("Входная строка не может быть пустой")
 
-    number_str = parts[-1]
-
-    # Проверяем, что номер состоит только из цифр
-    if not number_str.isdigit():
+    # Извлекаем числовую часть
+    number_match = re.search(r"\d+", card_info)
+    if not number_match:
         raise ValueError("Номер карты/счёта должен содержать только цифры")
 
-    if card_info.startswith("Счет"):
-        masked_number = get_mask_account(number_str)
-    else:
-        masked_number = get_mask_card_number(number_str)
+    number = number_match.group()
 
-    return f"{' '.join(parts[:-1])} {masked_number}"
+    # Определяем тип по длине числа
+    if len(number) == 16:
+        # Карта: маскируем средние цифры
+        masked_number = f"{number[:4]} {number[4:6]}** **** {number[-4:]}"
+        # Вставляем замаскированное число обратно в строку
+        return re.sub(r"\d+", masked_number, card_info)
+    elif len(number) >= 4:
+        # Счёт: показываем только последние 4 цифры
+        masked_number = f"**{number[-4:]}"
+        return re.sub(r"\d+", masked_number, card_info)
+    else:
+        raise ValueError("Некорректная длина номера карты/счёта")
 
 
 def get_date(date_string: str) -> str:

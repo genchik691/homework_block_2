@@ -2,17 +2,39 @@
     """Маскирует номер карты, оставляя видимыми первые 6 и последние 4 цифры.
     Формат: 1234 56** **** 3456
     """
-    clean_number = card_number.replace(" ", "")
+    if not card_number:  # обработка пустой строки
+        return ""
 
-    if len(clean_number) != 16 or not clean_number.isdigit():
-        raise ValueError("Номер карты должен содержать 16 цифр")
+    # Удаляем пробелы и дефисы
+    clean_number = card_number.replace(" ", "").replace("-", "")
 
-    # Форматируем с пробелами: 1234 5678 9012 3456
-    formatted = f"{clean_number[:4]} {clean_number[4:8]}" f"{clean_number[8:12]} {clean_number[12:]}"
+    if not clean_number.isdigit():
+        raise ValueError("Номер карты должен содержать только цифры")
 
-    # Маскируем средние цифры: 1234 56** **** 3456 (убираем лишний пробел)
-    masked = f"{formatted[:7]}** **** {formatted[-4:]}"
-    return masked
+    # Если номер короче 6 цифр — не маскируем
+    if len(clean_number) < 6:
+        return clean_number
+
+    # Для номеров ровно 6 цифр — возвращаем как есть
+    if len(clean_number) == 6:
+        return clean_number
+
+    # Определяем количество последних цифр:
+    # - для номеров 7–9 цифр: последние 2 цифры
+    # - для номеров 10–15 цифр: последние 3 цифры
+    # - для номеров 16+ цифр: последние 4 цифры
+    if len(clean_number) <= 10:
+        num_last_digits = 2
+    elif len(clean_number) <= 15:
+        num_last_digits = 3
+    else:
+        num_last_digits = 4
+
+    # Берём последние N цифр
+    end = clean_number[-num_last_digits:]
+    start = clean_number[:6]
+
+    return f"{start[:4]} {start[4:6]}** **** {end}"
 
 
 def get_mask_account(account_number: str) -> str:
