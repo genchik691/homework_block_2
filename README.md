@@ -59,11 +59,13 @@ homework_block_2/
 ├── htmlcov/                # Отчёт о покрытии тестами (создаётся автоматически)
 ├── src/                    # Основной код проекта
 │   ├── __init__.py       # Инициализация пакета src
+│   ├── generators.py     # Модуль с генераторами для обработки транзакций
 │   ├── masks.py          # Модуль маскирования номеров карт и счетов
 │   ├── processing.py     # Модуль обработки данных (фильтрация, сортировка)
 │   └── widget.py         # Модуль виджетов/интерфейсных функций
 ├── tests/                # Тестовые файлы
 │   ├── __init__.py       # Инициализация тестового пакета
+│   ├── test_generators.py # Тесты для модуля generators 
 │   ├── test_masks.py     # Тесты для модуля masks
 │   ├── test_processing.py # Тесты для модуля processing
 │   └── test_widget.py    # Тесты для модуля widget
@@ -95,4 +97,26 @@ poetry run pytest tests/ -v
 * Python 3.8+
 * pytest (для запуска тестов)
 * isort, flake8, mypy (для проверки кода)
- 
+```
+
+# Проект обработки транзакций
+
+## Модуль generators
+
+Модуль `generators` предоставляет инструменты для эффективной работы с большими объемами данных транзакций через генераторы Python.
+
+### Функции
+
+#### `filter_by_currency(transactions, currency)`
+
+Фильтрует транзакции по заданной валюте и возвращает итератор.
+
+```python
+from generators import filter_by_currency
+
+transactions = [...]  # ваш список транзакций
+usd_transactions = filter_by_currency(transactions, "USD")
+
+# Получаем первые 2 транзакции в USD
+for _ in range(2):
+    print(next(usd_transactions))
