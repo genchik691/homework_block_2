@@ -70,22 +70,3 @@ exclude = [
     "venv",
     ".git"
 ]
-[tool.pytest.ini_options]
-pythonpath = ["."]
-testpaths = ["tests"]
-
-[tool.coverage.run]
-source = ["src"]
-omit = ["tests/*", "*/site-packages/*"]
-
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if self.debug:",
-    "if __name__ == .__main__.:",
-    "raise AssertionError",
-    "raise NotImplementedError",
-    "if 0:",
-    "if False:",
-]
