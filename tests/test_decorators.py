@@ -92,12 +92,15 @@ class TestLogDecorator:
         assert "divide error: ZeroDivisionError" in content
         assert "Inputs: (10, 0)" in content
 
-    @pytest.mark.parametrize("a,b,expected", [
-        (1, 2, 3),
-        (5, 7, 12),
-        (10, -3, 7),
-        (0, 0, 0),
-    ])
+    @pytest.mark.parametrize(
+        "a,b,expected",
+        [
+            (1, 2, 3),
+            (5, 7, 12),
+            (10, -3, 7),
+            (0, 0, 0),
+        ],
+    )
     def test_log_with_multiple_inputs(self, capsys, a, b, expected):
         """Параметризованный тест с разными входными данными."""
 
