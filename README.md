@@ -56,30 +56,20 @@ print(filtered)
 
 
 homework_block_2/
-├── data/
-│   └── operations.json     # Файл с транзакциями
 ├── htmlcov/                # Отчёт о покрытии тестами (создаётся автоматически)
 ├── src/                    # Основной код проекта
 │   ├── __init__.py       # Инициализация пакета src
-│   ├── decorators.py      # Новый модуль с декоратором log
-│   ├── external_api.py          # Новый модуль для API
 │   ├── generators.py     # Модуль с генераторами для обработки транзакций
 │   ├── masks.py          # Модуль маскирования номеров карт и счетов
 │   ├── processing.py     # Модуль обработки данных (фильтрация, сортировка)
-│   ├── utils.py                 # Новый модуль для утилит
 │   └── widget.py         # Модуль виджетов/интерфейсных функций
 ├── tests/                # Тестовые файлы
 │   ├── __init__.py       # Инициализация тестового пакета
-│   ├── test_decorators.py  # Новые тесты для декоратора
-│   ├── test_external_api.py     # Новые тесты
 │   ├── test_generators.py # Тесты для модуля generators 
 │   ├── test_masks.py     # Тесты для модуля masks
 │   ├── test_processing.py # Тесты для модуля processing
-│   ├── test_utils.py            # Новые тесты
 │   └── test_widget.py    # Тесты для модуля widget
 ├── .coverage             # Файл с данными покрытия тестами (автоматически создаётся)
-├── .env                         # Переменные окружения (не коммитим)
-├── .env.example                 # Шаблон .env (коммитим)
 ├── .flake8             # Конфигурация линтера Flake8
 ├── .gitignore          # Список игнорируемых файлов и папок для Git
 ├── main.py             # Главный файл запуска приложения
@@ -130,43 +120,3 @@ usd_transactions = filter_by_currency(transactions, "USD")
 # Получаем первые 2 транзакции в USD
 for _ in range(2):
     print(next(usd_transactions))
-```
-## Модуль decorators
-
-Модуль `decorators` предоставляет декораторы для логирования выполнения функций.
-
-### Декоратор `log`
-
-Декоратор автоматически логирует начало и конец выполнения функции, а также её результаты или возникшие ошибки.
-
-#### Параметры:
-- `filename` (optional): Имя файла для записи логов. Если не указан, логи выводятся в консоль.
-
-#### Примеры использования:
-
-**Логирование в консоль:**
-```python
-from src.decorators import log
-
-@log()
-def add(a, b):
-    return a + b
-
-add(3, 5)  # Выведет: add ok
-```
-
-## Модуль utils
-
-Модуль `utils` предоставляет утилиты для работы с данными, включая чтение JSON файлов.
-
-### Функция `read_json_file`
-
-Читает JSON файл и возвращает список словарей с транзакциями.
-
-```python
-from src.utils import read_json_file
-
-# Чтение транзакций из файла
-transactions = read_json_file("data/operations.json")
-print(f"Загружено {len(transactions)} транзакций")
-```
