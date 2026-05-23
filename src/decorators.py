@@ -27,6 +27,7 @@ def log(filename: Optional[str] = None) -> Callable:
         >>> print(result)
         3
     """
+
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -59,6 +60,7 @@ def log(filename: Optional[str] = None) -> Callable:
                 raise
 
         return wrapper
+
     return decorator
 
 
