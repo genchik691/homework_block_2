@@ -1,8 +1,14 @@
 """Модуль с утилитами для работы с JSON файлами."""
 
 import json
+import logging
 from pathlib import Path
 from typing import Any, Dict, List, Union
+
+from src.logger_config import setup_logger
+
+# Настраиваем логер для модуля utils
+logger = setup_logger(__name__, "utils.log", logging.DEBUG)
 
 
 def read_json_file(file_path: Union[str, Path]) -> List[Dict[str, Any]]:
@@ -15,30 +21,16 @@ def read_json_file(file_path: Union[str, Path]) -> List[Dict[str, Any]]:
     Returns:
         Список словарей с данными транзакций.
         Возвращает пустой список в случае ошибки или если файл содержит не список.
-
-    Examples:
-        >>> # Создаем временный файл для примера
-        >>> import tempfile
-        >>> import json
-        >>> test_data = [{"id": 1, "description": "Test transaction"}]
-        >>> with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as tmp:
-        ...     json.dump(test_data, tmp)
-        ...     tmp_path = tmp.name
-        >>> transactions = read_json_file(tmp_path)
-        >>> len(transactions)
-        1
-        >>> transactions[0]["description"]
-        'Test transaction'
-        >>> # Очищаем временный файл
-        >>> import os
-        >>> os.unlink(tmp_path)
     """
+    logger.debug(f"Попытка чтения JSON файла: {file_path}")
+
     try:
         # Преобразуем путь к файлу
         file_path = Path(file_path)
 
         # Проверяем существование файла
         if not file_path.exists():
+            logger.error(f"Файл не найден: {file_path}")
             return []
 
         # Открываем и читаем файл
@@ -47,9 +39,24 @@ def read_json_file(file_path: Union[str, Path]) -> List[Dict[str, Any]]:
 
         # Проверяем, что данные - это список
         if isinstance(data, list):
+            logger.info(f"Успешно загружено {len(data)} транзакций из файла {file_path}")
             return data
         else:
+            logger.error(f"Файл {file_path} содержит не список, а {type(data).__name__}")
             return []
 
-    except (json.JSONDecodeError, FileNotFoundError, PermissionError, OSError):
+    except json.JSONDecodeError as e:
+        logger.error(f"Ошибка декодирования JSON в файле {file_path}: {e}")
+        return []
+    except FileNotFoundError as e:
+        logger.error(f"Файл не найден: {file_path}. Ошибка: {e}")
+        return []
+    except PermissionError as e:
+        logger.error(f"Нет прав для чтения файла {file_path}: {e}")
+        return []
+    except OSError as e:
+        logger.error(f"Ошибка операционной системы при чтении файла {file_path}: {e}")
+        return []
+    except Exception as e:
+        logger.error(f"Неожиданная ошибка при чтении файла {file_path}: {e}")
         return []
