@@ -56,44 +56,47 @@ print(filtered)
 
 
 homework_block_2/
-├── logs/                        # Новая папка для логов
+├── logs/                       # Новая папка для логов
 │   ├── masks.log               # Логи модуля masks
 │   └── utils.log               # Логи модуля utils
-│   └── file_reading.log         # Новый лог файл
+│   └── file_reading.log        # Новый лог файл
 ├── data/
 │   └── operations.json     # Файл с транзакциями
 │   ├── transactions.csv         # Новый файл
 │   └── transactions_excel.xlsx  # Новый файл
-├── htmlcov/                # Отчёт о покрытии тестами (создаётся автоматически)
-├── src/                    # Основной код проекта
+├── htmlcov/              # Отчёт о покрытии тестами (создаётся автоматически)
+├── src/                  # Основной код проекта
 │   ├── __init__.py       # Инициализация пакета src
-│   ├── decorators.py      # Новый модуль с декоратором log
-│   ├── external_api.py          # Новый модуль для API
-│   ├── file_reader.py           # НОВЫЙ МОДУЛЬ
+│   ├── decorators.py     # Новый модуль с декоратором log
+│   ├── external_api.py   # Новый модуль для API
+│   ├── file_reader.py    # НОВЫЙ МОДУЛЬ
 │   ├── generators.py     # Модуль с генераторами для обработки транзакций
+│   ├── logger_config.py  # Конфигурация логгера
 │   ├── masks.py          # Модуль маскирования номеров карт и счетов # Добавляем логирование
-│   ├── processing.py     # Модуль обработки данных (фильтрация, сортировка)
-│   ├── utils.py                 # Новый модуль для утилит # Добавляем логирование
+│   ├── processing.py     # Модуль обработки данных # НОВЫЕ ФУНКЦИИ ЗДЕСЬ
+│   ├── search_utils.py   # НОВЫЙ МОДУЛЬ ДЛЯ ПОИСКА
+│   ├── utils.py          # Новый модуль для утилит # Добавляем логирование
 │   └── widget.py         # Модуль виджетов/интерфейсных функций
 ├── tests/                # Тестовые файлы
 │   ├── __init__.py       # Инициализация тестового пакета
 │   ├── test_decorators.py  # Новые тесты для декоратора
 │   ├── test_external_api.py     # Новые тесты
 │   ├── test_file_reader.py      # НОВЫЕ ТЕСТЫ
-│   ├── test_generators.py # Тесты для модуля generators 
-│   ├── test_masks.py     # Тесты для модуля masks
-│   ├── test_processing.py # Тесты для модуля processing
-│   ├── test_utils.py            # Новые тесты
-│   └── test_widget.py    # Тесты для модуля widget
-├── .coverage             # Файл с данными покрытия тестами (автоматически создаётся)
-├── .env                         # Переменные окружения (не коммитим)
-├── .env.example                 # Шаблон .env (коммитим)
-├── .flake8             # Конфигурация линтера Flake8
-├── .gitignore          # Список игнорируемых файлов и папок для Git
-├── main.py             # Главный файл запуска приложения
+│   ├── test_generators.py  # Тесты для модуля generators 
+│   ├── test_masks.py       # Тесты для модуля masks
+│   ├── test_processing.py  # ОБНОВЛЕННЫЕ ТЕСТЫ Тесты для модуля processing
+│   ├── test_search_utils.py    # НОВЫЕ ТЕСТЫ
+│   ├── test_utils.py           # Новые тесты
+│   └── test_widget.py      # Тесты для модуля widget
+├── .coverage          # Файл с данными покрытия тестами (автоматически создаётся)
+├── .env               # Переменные окружения (не коммитим)
+├── .env.example       # Шаблон .env (коммитим)
+├── .flake8            # Конфигурация линтера Flake8
+├── .gitignore         # Список игнорируемых файлов и папок для Git
+├── main.py            # ОБНОВЛЕННЫЙ Главный файл запуска приложения
 ├── poetry.lock        # Файл зависимостей Poetry (автоматически генерируется)
-├── pyproject.toml    # Конфигурация проекта и зависимостей Poetry
-└── README.md           # Документация проекта
+├── pyproject.toml     # Конфигурация проекта и зависимостей Poetry
+└── README.md          # Документация проекта
 
 ```
 
@@ -221,4 +224,29 @@ from src.file_reader import read_csv_file
 transactions = read_csv_file("data/transactions.csv")
 for transaction in transactions:
     print(transaction["description"])
+```
+## Модуль search_utils
+
+Модуль `search_utils` предоставляет функции для поиска и подсчета транзакций с использованием регулярных выражений.
+
+### Функции
+
+#### `search_transactions(transactions, search_string)`
+
+Ищет транзакции по строке в описании с использованием регулярных выражений (регистронезависимо).
+
+```python
+from src.search_utils import search_transactions
+
+transactions = [...]  # ваши транзакции
+result = search_transactions(transactions, "перевод")
+print(f"Найдено {len(result)} транзакций")
+count_transactions_by_categories(transactions, categories)
+Подсчитывает количество транзакций по указанным категориям.
+
+from src.search_utils import count_transactions_by_categories
+
+categories = ["Перевод", "Оплата", "Покупка"]
+counts = count_transactions_by_categories(transactions, categories)
+print(counts)  # {'Перевод': 5, 'Оплата': 2, 'Покупка': 1}
 ```
