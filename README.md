@@ -59,13 +59,17 @@ homework_block_2/
 ├── logs/                        # Новая папка для логов
 │   ├── masks.log               # Логи модуля masks
 │   └── utils.log               # Логи модуля utils
+│   └── file_reading.log         # Новый лог файл
 ├── data/
 │   └── operations.json     # Файл с транзакциями
+│   ├── transactions.csv         # Новый файл
+│   └── transactions_excel.xlsx  # Новый файл
 ├── htmlcov/                # Отчёт о покрытии тестами (создаётся автоматически)
 ├── src/                    # Основной код проекта
 │   ├── __init__.py       # Инициализация пакета src
 │   ├── decorators.py      # Новый модуль с декоратором log
 │   ├── external_api.py          # Новый модуль для API
+│   ├── file_reader.py           # НОВЫЙ МОДУЛЬ
 │   ├── generators.py     # Модуль с генераторами для обработки транзакций
 │   ├── masks.py          # Модуль маскирования номеров карт и счетов # Добавляем логирование
 │   ├── processing.py     # Модуль обработки данных (фильтрация, сортировка)
@@ -75,6 +79,7 @@ homework_block_2/
 │   ├── __init__.py       # Инициализация тестового пакета
 │   ├── test_decorators.py  # Новые тесты для декоратора
 │   ├── test_external_api.py     # Новые тесты
+│   ├── test_file_reader.py      # НОВЫЕ ТЕСТЫ
 │   ├── test_generators.py # Тесты для модуля generators 
 │   ├── test_masks.py     # Тесты для модуля masks
 │   ├── test_processing.py # Тесты для модуля processing
@@ -198,4 +203,22 @@ print(f"Загружено {len(transactions)} транзакций")
 **Ошибочная операция:**
 ```
 2024-01-15 10:30:45 - src.utils - ERROR - Файл не найден: data/nonexistent.json
+```
+
+## Модуль file_reader
+
+Модуль `file_reader` предоставляет функции для чтения финансовых транзакций из различных форматов файлов.
+
+### Функции
+
+#### `read_csv_file(file_path)`
+
+Читает CSV файл и возвращает список словарей с транзакциями.
+
+```python
+from src.file_reader import read_csv_file
+
+transactions = read_csv_file("data/transactions.csv")
+for transaction in transactions:
+    print(transaction["description"])
 ```
